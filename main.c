@@ -8,6 +8,10 @@
 #define TAMTABULEIROY 2
 #define MAXTAM 1000
 
+#define VERDE 10
+#define VERMELHO 12
+#define BRANCO 15
+
 struct Jogo{
     int tabuleiro[TAMTABULEIROX][TAMTABULEIROY];
     int pontuacao;
@@ -29,6 +33,7 @@ void antiglitch(int x, int y){
 
 void cobrinha(struct Jogo *jogo){
     int i;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), VERDE);
     for(i = 0; i < jogo->pontuacao; i++){
         antiglitch(jogo->tabuleiro[i][0], jogo->tabuleiro[i][1]);
         printf("%c", 219);
@@ -56,6 +61,9 @@ void atualizar(struct Jogo *jogo) {
 
 void fruta(struct Jogo *jogo){
     int preenchido = 0;
+
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), VERMELHO);
+
     antiglitch(jogo->maca[0], jogo->maca[1]);
     printf(" ");
 
@@ -191,10 +199,10 @@ int main(){
 
             atualizar(&jogo);
             cobrinha(&jogo);
-            antiglitch(50, 20);
+            antiglitch(49, 19);
             Sleep(jogo.speed);
         }
-
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRANCO);
         antiglitch(17, 9);
         printf("G A M E  O V E R\n");
         antiglitch(19, 10);
