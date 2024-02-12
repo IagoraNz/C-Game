@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/iagot/SnakeGameC/SnakeGameC",
-      "program": "c:/Users/iagot/SnakeGameC/SnakeGameC/build/Debug/outDebug",
+      "cwd": "c:/Users/iagot/SnakeGameC/C-Game",
+      "program": "c:/Users/iagot/SnakeGameC/C-Game/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
