@@ -7,6 +7,7 @@
 #define TAMTABULEIROX 300
 #define TAMTABULEIROY 2
 #define MAXTAM 1000
+#define MAXJOGADORES 100
 
 #define VERDE 10
 #define VERMELHO 12
@@ -25,6 +26,12 @@ struct Jogo{
     .tabx = 2,
     .taby = 2,
     .speed = 150
+};
+
+//struct para armazenar o nome e a pontuação do jogador no ranking
+struct Jogador {
+    char nomejogador[MAXTAM];
+    int pontuacao;
 };
 
 void antiglitch(int x, int y){
@@ -98,6 +105,110 @@ int stringparaint(char *string){
     return num;
 }
 
+void tutorial(){
+    system("cls");
+
+
+
+    printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA     S N A K E  G A M E  -  TUTORIAL     \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA    Are you ready for?                   \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA    Antes de nos divertir, leia as       \xBA\n");
+    printf("\xBA    seguintes instrucoes:                \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA I.   Use as teclas W, A, S, D ou as     \xBA\n");
+    printf("\xBA      setas direcionais para mover a     \xBA\n");
+    printf("\xBA      cobra.                             \xBA\n");
+    printf("\xBA II.  A cobra deve pegar a fruta para    \xBA\n");
+    printf("\xBA      crescer.                           \xBA\n");
+    printf("\xBA III. Evite colidir com as paredes ou    \xBA\n");
+    printf("\xBA      com o proprio corpo da cobra.      \xBA\n");
+    printf("\xBA IV.  Escute o album REPUTATION da       \xBA\n");
+    printf("\xBA      Taylor Swift enquanto joga.        \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA                    Aproveite o jogo!    \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA                                         \xBA\n");
+    printf("\xBA Pressione qualquer tecla para voltar ao \xBA\n");
+    printf("\xBA menu...                                 \xBA\n");
+    printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+    
+    getch(); //espera o usuário pressionar uma tecla antes de voltar ao menu
+}
+
+void ranking(struct Jogador jogador) {
+    FILE *arquivo=fopen("ranking.txt", "r"); // Abertura do arquivo no modo de anexar
+    if(arquivo==NULL){
+        printf("ERRO AO ABRIR O ARQUIVO 'RANKING'.\n");
+        return;
+    }else{
+        printf("╔══════════════════════════════════════════════════════════════════════════╗\n");
+        printf("║                                                                          ║\n");
+        printf("║                              R A N K I N G                               ║\n");
+        printf("║                                                                          ║\n");
+        printf("╚══════════════════════════════════════════════════════════════════════════╝\n");
+
+        printf("O jogador %s obteve uma pontuacao de %d.\n", jogador.nomejogador, jogador.pontuacao);
+        
+        //escreve os dados do jogador no arquivo
+        fprintf(arquivo, "Nome de usuario: %s | Pontuacao: %d\n", jogador.nomejogador, jogador.pontuacao);
+        
+        fclose(arquivo); //fechamento do arquivo
+    }
+}
+
+/*
+void atualizaranking(struct Jogador jogador) {
+    struct Jogador jogadores[MAXJOGADORES];
+    int numerojogadores = 0;
+
+    //leitura dos jogadores do arquivo
+    FILE *arquivo = fopen("ranking.txt", "r");
+    if(arquivo!= NULL){
+        while(fscanf(arquivo, "Nome de usuario: %s | Pontuacao: %d\n", jogadores[numerojogadores].nomejogador, &jogadores[numerojogadores].pontuacao) == 2) {
+            numerojogadores++;
+        }
+        fclose(arquivo);
+    }
+
+    //adição do novo jogador à lista
+    jogadores[numerojogadores] = jogador;
+    numerojogadores++;
+
+    //ordenção dos jogadores por pontuação
+    for(int i=0;i<numerojogadores-1;i++){
+        for(int j=0;j<numerojogadores-i-1;j++){
+            if(jogadores[j].pontuacao>jogadores[j+1].pontuacao){
+                struct Jogador temp=jogadores[j];
+                jogadores[j]=jogadores[j+1];
+                jogadores[j+1]=temp;
+            }
+        }
+    }
+
+    //reescreve o arquivo com os jogadores ordenados
+    FILE *arquivo = fopen("ranking.txt", "w");
+    if(arquivo != NULL){
+        printf("╔══════════════════════════════════════════════════════════════════════════╗\n");
+        printf("║                                                                          ║\n");
+        printf("║                              R A N K I N G                               ║\n");
+        printf("║                                                                          ║\n");
+        printf("╚══════════════════════════════════════════════════════════════════════════╝\n");
+        
+        for(int i=0;i<numerojogadores;i++){
+            printf("%d. Jogador: %s | Pontuacao: %d\n", i+1, jogadores[i].nomejogador, jogadores[i].pontuacao);
+            fprintf(arquivo, "Nome de usuario: %s | Pontuacao: %d\n", jogadores[i].nomejogador, jogadores[i].pontuacao);
+        }
+        fclose(arquivo);
+    }
+}
+*/
+
+
 int main(){
     char menus[5][MAXTAM] = {
         "1 - Jogar",
@@ -108,7 +219,8 @@ int main(){
     };
 
     int i, j, gameover = 0, opcao = 0;
-    char clicar;
+    char clicar, nomejogador[MAXTAM];
+    struct Jogador jogador;
 
     system("cls");
 
@@ -130,6 +242,9 @@ int main(){
     case 1:
         system("cls");
         srand(time(NULL));
+
+        printf("Digite seu nome de usuario: "); //solicitação do nome do jogador
+        scanf("%s", nomejogador); 
 
         for(i = 1; i < 49; i++){
             for(j = 1; j < 20; j++){
@@ -202,13 +317,25 @@ int main(){
             antiglitch(49, 19);
             Sleep(jogo.speed);
         }
+
+        //após o término do jogo, as informações são salvas no ranking    
+        struct Jogador jogador; //declaração de uma variável para representar o jogador atual
+        FILE *arquivo=fopen("ranking.txt", "a"); //abertura do arquivo no modo de anexar
+        if(arquivo==NULL){
+            printf("ERRO AO ABRIR O ARQUIVO 'RANKING'.\n");
+            return;
+        }
+        else{
+            
+        }
+
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRANCO);
         antiglitch(17, 9);
         printf("G A M E  O V E R\n");
         antiglitch(19, 10);
         printf("Pontuacao: %d\n", jogo.pontuacao);
         antiglitch(1, 21);
-        printf("Deseja jogar novamente? ('1' para voltar ao menu / '0' para sair do jogo): ");
+        printf("%s, voce deseja jogar novamente? ('1' para voltar ao menu / '0' para sair do jogo): ", nomejogador);
         char input[1];
         scanf("%s", input);
         int opc;
@@ -232,7 +359,16 @@ int main(){
         }
         
         break;
-    
+
+    case 2:
+        tutorial();
+        break;
+    case 3:
+        break;
+    case 4:
+        ranking(jogador);
+        break;
+
     default:
         break;
     }
