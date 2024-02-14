@@ -140,24 +140,34 @@ void tutorial(){
     getch(); //espera o usuário pressionar uma tecla antes de voltar ao menu
 }
 
-void ranking(struct Jogador jogador) {
-    FILE *arquivo=fopen("ranking.txt", "r"); // Abertura do arquivo no modo de anexar
-    if(arquivo==NULL){
-        printf("ERRO AO ABRIR O ARQUIVO 'RANKING'.\n");
-        return;
-    }else{
-        printf("╔══════════════════════════════════════════════════════════════════════════╗\n");
-        printf("║                                                                          ║\n");
-        printf("║                              R A N K I N G                               ║\n");
-        printf("║                                                                          ║\n");
-        printf("╚══════════════════════════════════════════════════════════════════════════╝\n");
+void ranking(struct Jogador jogador){
 
-        printf("O jogador %s obteve uma pontuacao de %d.\n", jogador.nomejogador, jogador.pontuacao);
+    FILE *arquivo;
+    
+    arquivo = fopen("ranking.txt", "r"); 
+
+    if(arquivo==NULL){
+        printf("Erro ao abrir o arquivo rankin.\n");
+        return;
+    }
+    else{
+        system("cls");
+        printf("\n");
+        printf("\xC9\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBB\n");
+        printf("\xBA                                                                          \xBA\n");
+        printf("\xBA                    R A N K I N G                          \xBA\n");
+        printf("\xBA                                                                          \xBA\n");
+        printf("\xC8\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xCD\xBC\n");
+
+        //while(fscanf(.......)){
+        //       Usando o bubble sort de acordo com a jogador.pontuacao
+        //}
+        //fseek(arquivo, 0, SEEK_SET);
+        while(fscanf(arquivo, "%s %d\n", jogador.nomejogador, &jogador.pontuacao) == 2){
+            printf("Jogador %s fez a pontuacao: %d\n", jogador.nomejogador, jogador.pontuacao);
+        }
         
-        //escreve os dados do jogador no arquivo
-        fprintf(arquivo, "Nome de usuario: %s | Pontuacao: %d\n", jogador.nomejogador, jogador.pontuacao);
-        
-        fclose(arquivo); //fechamento do arquivo
+        fclose(arquivo); //Fechamento do arquivo
     }
 }
 
@@ -169,7 +179,7 @@ void atualizaranking(struct Jogador jogador) {
     //leitura dos jogadores do arquivo
     FILE *arquivo = fopen("ranking.txt", "r");
     if(arquivo!= NULL){
-        while(fscanf(arquivo, "Nome de usuario: %s | Pontuacao: %d\n", jogadores[numerojogadores].nomejogador, &jogadores[numerojogadores].pontuacao) == 2) {
+        while(fscanf(arquivo, "%s %d\n", jogadores[numerojogadores].nomejogador, &jogadores[numerojogadores].pontuacao) == 2) {
             numerojogadores++;
         }
         fclose(arquivo);
@@ -220,158 +230,173 @@ int main(){
 
     int i, j, gameover = 0, opcao = 0;
     char clicar, nomejogador[MAXTAM];
-    struct Jogador jogador;
 
-    system("cls");
-
-    antiglitch(10,1);
-    printf("%s","S N A K E  G A M E");
-
-    for(i = 0; i < 5; i++){
-        antiglitch(10, 3 + i);
-        printf("%s", menus[i]);
-    }
-
-    antiglitch(10,9);
-
-    printf("%s","Digite a opcao desejada: ");
-    scanf("%d", &opcao);
-
-    switch (opcao)
-    {
-    case 1:
+    do{
         system("cls");
-        srand(time(NULL));
+        antiglitch(10,1);
+        printf("%s","S N A K E  G A M E");
 
-        printf("Digite seu nome de usuario: "); //solicitação do nome do jogador
-        scanf("%s", nomejogador); 
-
-        for(i = 1; i < 49; i++){
-            for(j = 1; j < 20; j++){
-                if(i == 1 || i == 48 || j == 1 || j == 19){
-                    antiglitch(i, j);
-                    printf("%c", 219);
-                }
-            }
+        for(i = 0; i < 5; i++){
+            antiglitch(10, 3 + i);
+            printf("%s", menus[i]);
         }
 
-        fruta(&jogo);
-        cobrinha(&jogo);
+        antiglitch(10,9);
 
-        jogo.direcao = 'd'; // Comece com uma direção inicial
+        printf("%s","Digite a opcao desejada: ");
+        scanf("%d", &opcao);
 
-        while(!gameover){
+        switch (opcao)
+        {
+        case 1:
+            system("cls");
+            srand(time(NULL));
 
-            jogo.tabuleiro[0][0] = jogo.tabx;
-            jogo.tabuleiro[0][1] = jogo.taby;
+            printf("J O G A D O R");
+            printf("\nDigite seu nome de usuario: "); //solicitação do nome do jogador
+            scanf("%s", nomejogador);
 
-            if (kbhit()) {
-                clicar = getch();
-                if (clicar == 'w' || clicar == 'W' || clicar == 72) {
-                    if (jogo.direcao != 's' && jogo.direcao != 'S') {
-                        jogo.direcao = 'w';
-                    }
-                }
-                else if (clicar == 'a' || clicar == 'A' || clicar == 75) {
-                    if (jogo.direcao != 'd' && jogo.direcao != 'D') {
-                        jogo.direcao = 'a';
-                    }
-                }
-                else if (clicar == 's' || clicar == 'S' || clicar == 80) {
-                    if (jogo.direcao != 'w' && jogo.direcao != 'W') {
-                        jogo.direcao = 's';
-                    }
-                }
-                else if (clicar == 'd' || clicar == 'D' || clicar == 77) {
-                    if (jogo.direcao != 'a' && jogo.direcao != 'A') {
-                        jogo.direcao = 'd';
+            system("cls"); 
+
+            for(i = 1; i < 49; i++){
+                for(j = 1; j < 20; j++){
+                    if(i == 1 || i == 48 || j == 1 || j == 19){
+                        antiglitch(i, j);
+                        printf("%c", 219);
                     }
                 }
             }
 
-            if (jogo.tabx == jogo.maca[0] && jogo.taby == jogo.maca[1]) {
-                jogo.pontuacao++;
-                fruta(&jogo);
-            }
-
-            if((jogo.direcao == 'w' || jogo.direcao == 'W') && (jogo.taby > 2 || jogo.pontuacao >= 1))
-                jogo.taby--;
-
-            if((jogo.direcao == 'a' || jogo.direcao == 'A') && (jogo.tabx > 2 || jogo.pontuacao >= 1))
-                jogo.tabx--;
-
-            if((jogo.direcao == 's' || jogo.direcao == 'S') && (jogo.taby < 18 || jogo.pontuacao >= 1))
-                jogo.taby++;
-
-            if((jogo.direcao == 'd' || jogo.direcao == 'D') && (jogo.tabx < 47 || jogo.pontuacao >= 1))
-                jogo.tabx++;
-
-            gameover = bateuemsi(&jogo);
-
-            if(jogo.tabx == 1 || jogo.tabx == 48 || jogo.taby == 1 || jogo.taby == 19){
-                gameover = 1;
-            }
-
-            atualizar(&jogo);
+            fruta(&jogo);
             cobrinha(&jogo);
-            antiglitch(49, 19);
-            Sleep(jogo.speed);
-        }
 
-        //após o término do jogo, as informações são salvas no ranking    
-        struct Jogador jogador; //declaração de uma variável para representar o jogador atual
-        FILE *arquivo=fopen("ranking.txt", "a"); //abertura do arquivo no modo de anexar
-        if(arquivo==NULL){
-            printf("ERRO AO ABRIR O ARQUIVO 'RANKING'.\n");
-            return;
-        }
-        else{
-            
-        }
+            jogo.direcao = 'd'; // Comece com uma direção inicial
 
-        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRANCO);
-        antiglitch(17, 9);
-        printf("G A M E  O V E R\n");
-        antiglitch(19, 10);
-        printf("Pontuacao: %d\n", jogo.pontuacao);
-        antiglitch(1, 21);
-        printf("%s, voce deseja jogar novamente? ('1' para voltar ao menu / '0' para sair do jogo): ", nomejogador);
-        char input[1];
-        scanf("%s", input);
-        int opc;
-        opc = stringparaint(input);
-        if(opc == 1){
-            jogo.pontuacao = 1;
-            jogo.tabx = 2;
-            jogo.taby = 2;
-            jogo.speed = 150;
-            gameover = 0;
-            main();
-        }
-        else if(opc == 0){
+            while(!gameover){
+
+                jogo.tabuleiro[0][0] = jogo.tabx;
+                jogo.tabuleiro[0][1] = jogo.taby;
+
+                if (kbhit()) {
+                    clicar = getch();
+                    if (clicar == 'w' || clicar == 'W' || clicar == 72) {
+                        if (jogo.direcao != 's' && jogo.direcao != 'S') {
+                            jogo.direcao = 'w';
+                        }
+                    }
+                    else if (clicar == 'a' || clicar == 'A' || clicar == 75) {
+                        if (jogo.direcao != 'd' && jogo.direcao != 'D') {
+                            jogo.direcao = 'a';
+                        }
+                    }
+                    else if (clicar == 's' || clicar == 'S' || clicar == 80) {
+                        if (jogo.direcao != 'w' && jogo.direcao != 'W') {
+                            jogo.direcao = 's';
+                        }
+                    }
+                    else if (clicar == 'd' || clicar == 'D' || clicar == 77) {
+                        if (jogo.direcao != 'a' && jogo.direcao != 'A') {
+                            jogo.direcao = 'd';
+                        }
+                    }
+                }
+
+                if (jogo.tabx == jogo.maca[0] && jogo.taby == jogo.maca[1]) {
+                    jogo.pontuacao++;
+                    fruta(&jogo);
+                }
+
+                if((jogo.direcao == 'w' || jogo.direcao == 'W') && (jogo.taby > 2 || jogo.pontuacao >= 1))
+                    jogo.taby--;
+
+                if((jogo.direcao == 'a' || jogo.direcao == 'A') && (jogo.tabx > 2 || jogo.pontuacao >= 1))
+                    jogo.tabx--;
+
+                if((jogo.direcao == 's' || jogo.direcao == 'S') && (jogo.taby < 18 || jogo.pontuacao >= 1))
+                    jogo.taby++;
+
+                if((jogo.direcao == 'd' || jogo.direcao == 'D') && (jogo.tabx < 47 || jogo.pontuacao >= 1))
+                    jogo.tabx++;
+
+                gameover = bateuemsi(&jogo);
+
+                if(jogo.tabx == 1 || jogo.tabx == 48 || jogo.taby == 1 || jogo.taby == 19){
+                    gameover = 1;
+                }
+
+                atualizar(&jogo);
+                cobrinha(&jogo);
+                antiglitch(49, 19);
+                Sleep(jogo.speed);
+            }
+
+            //após o término do jogo, as informações são salvas no ranking    
+            struct Jogador jogador; //declaração de uma variável para representar o jogador atual
+            FILE *arquivo=fopen("ranking.txt", "a"); //abertura do arquivo no modo de anexar
+            if(arquivo==NULL){
+                printf("Erro ao abrir o arquivo.\n");
+                exit(EXIT_FAILURE);
+            }
+            else{
+                SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRANCO);
+                printf("\n\nO jogador %s obteve uma pontuacao de %d.\n", nomejogador, jogo.pontuacao);
+                jogador.pontuacao = jogo.pontuacao;
+                strcpy(jogador.nomejogador, nomejogador);
+                fprintf(arquivo, "%s %d\n", jogador.nomejogador, jogador.pontuacao);
+                fclose(arquivo);
+            }
+
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), BRANCO);
+            antiglitch(17, 9);
+            printf("G A M E  O V E R\n");
+            antiglitch(19, 10);
+            printf("Pontuacao: %d\n", jogo.pontuacao);
+            antiglitch(1, 21);
+            printf("Voce deseja jogar novamente? ('1' para voltar ao menu / '0' para sair do jogo): ");
+            char input[1];
+            scanf("%s", input);
+            int opc;
+            opc = stringparaint(input);
+            if(opc == 1){
+                jogo.pontuacao = 1;
+                jogo.tabx = 2;
+                jogo.taby = 2;
+                jogo.speed = 150;
+                gameover = 0;
+                main();
+            }
+            else if(opc == 0){
+                exit(EXIT_FAILURE);
+            }
+            else if(opc != 0 || opc != 1){
+                antiglitch(1, 22);
+                printf("Opcao invalida, voltando ao menu...");
+                Sleep(2000);
+                main();
+            }
+            system("cls");
+            system("PAUSE");
+            break;
+
+        case 2:
+            tutorial();
+            system("cls");
+            break;
+        case 3:
+            break;
+        case 4:
+            ranking(jogador);
+            system("PAUSE");
+            break;
+
+        case 0:
+            printf("Saindo do jogo...");
             exit(EXIT_FAILURE);
+            break;
+        default:
+            break;
         }
-        else if(opc != 0 || opc != 1){
-            antiglitch(1, 22);
-            printf("Opcao invalida, voltando ao menu...");
-            Sleep(2000);
-            main();
-        }
-        
-        break;
-
-    case 2:
-        tutorial();
-        break;
-    case 3:
-        break;
-    case 4:
-        ranking(jogador);
-        break;
-
-    default:
-        break;
-    }
+    }while(opcao != 0);
 
     return 0;
 }
